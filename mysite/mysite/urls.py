@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from polls.Data.Extraction.raw_data_extraction import extract_raw_data
 
 urlpatterns = [
+    path('', include('polls.urls')),
     path('polls/', include('polls.urls')),
     path('admin/', admin.site.urls),
 ]
+
+
+# extract_raw_data('../raw_data/BPL_00_01.csv')
+extract_raw_data('../raw_data/test.csv')

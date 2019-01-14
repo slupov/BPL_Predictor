@@ -1,4 +1,4 @@
-#!/home/slupov/Documents/Projects/PremierLeaguePredictor/venv/bin/python
+#!/home/slupov/Documents/Projects/BPL_Predictor/venv/bin/python
 from django.core import management
 
 if __name__ == "__main__":
