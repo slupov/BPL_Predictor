@@ -86,11 +86,11 @@ def extract_raw_data(csv):
     # if MatchRawData.objects.count != 0:
     # MatchRawData.objects.delete()
 
-    # cols_to_use = cols_to_extract()
-
-    cols_to_use=['Div','Date','HomeTeam', 'AwayTeam']
+    cols_to_use = cols_to_extract()
+    #
+    # cols_to_use=['HomeTeam', 'Div','Date', 'AwayTeam']
     # Read and parse the csv file
-    parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, names=cols_to_use, header=0)
+    parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, names=cols_to_use, usecols=cols_to_use, header=0)
 
     # match_data = MatchRawData(date='2018-12-12', home_team='Home', away_team='Away',
     #                           full_time_home_goals=5, full_time_away_goals=0,
@@ -98,7 +98,7 @@ def extract_raw_data(csv):
     # match_data.save()
     #
 
-    print(parsed_csv[parsed_csv["Date"] == 14])
+    # print(parsed_csv[parsed_csv["Date"] == 14])
 
     for col in cols_to_use:
         values = parsed_csv[col].values

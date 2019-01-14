@@ -24,5 +24,5 @@ urlpatterns = [
 ]
 
 
-# extract_raw_data('../raw_data/BPL_00_01.csv')
-extract_raw_data('../raw_data/test.csv')
+extract_raw_data('../raw_data/BPL_00_01.csv')
+# extract_raw_data('../raw_data/test.csv')
