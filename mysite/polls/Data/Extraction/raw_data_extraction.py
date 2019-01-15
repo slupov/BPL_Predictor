@@ -1,6 +1,6 @@
 from ...models import MatchRawData
 from enum import IntEnum
-
+from datetime import datetime
 import pandas as pd
 
 
@@ -97,7 +97,8 @@ def extract_raw_data(csv):
 
     for index, row in parsed_csv.iterrows():
         match_data = MatchRawData()
-        # match_data.date = row[cols_to_use[RawDataCols.DATE]]
+        datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
+        match_data.date = datetime_object
         match_data.home_team = row[cols_to_use[RawDataCols.HOME_TEAM]]
         match_data.away_team = row[cols_to_use[RawDataCols.AWAY_TEAM]]
 
