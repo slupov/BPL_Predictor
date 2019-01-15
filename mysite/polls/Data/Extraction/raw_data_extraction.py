@@ -51,8 +51,10 @@ def cols_to_extract():
     cols_to_use[RawDataCols.HG] = 'HG'
     cols_to_use[RawDataCols.FTAG] = 'FTAG'
     cols_to_use[RawDataCols.AG] = 'AG'
+
     cols_to_use[RawDataCols.FTR] = 'FTR'
     cols_to_use[RawDataCols.RES] = 'Res'
+
     cols_to_use[RawDataCols.HTHG] = 'HTHG'
     cols_to_use[RawDataCols.HTAG] = 'HTAG'
     cols_to_use[RawDataCols.HTR] = 'HTR'
@@ -84,23 +86,52 @@ def cols_to_extract():
 def extract_raw_data(csv):
     # Clear the database table if it has any logs
     # if MatchRawData.objects.count != 0:
-    # MatchRawData.objects.delete()
+    #     MatchRawData.objects.delete()
 
     cols_to_use = cols_to_extract()
-    #
-    # cols_to_use=['HomeTeam', 'Div','Date', 'AwayTeam']
+
     # Read and parse the csv file
-    parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, names=cols_to_use, usecols=cols_to_use, header=0)
+    parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, header=0)
 
-    # match_data = MatchRawData(date='2018-12-12', home_team='Home', away_team='Away',
-    #                           full_time_home_goals=5, full_time_away_goals=0,
-    #                           full_time_result=-1)
-    # match_data.save()
-    #
+    results_parser={'H': 1, 'D':0, 'A':-1}
 
-    # print(parsed_csv[parsed_csv["Date"] == 14])
+    for index, row in parsed_csv.iterrows():
+        match_data = MatchRawData()
+        # match_data.date = row[cols_to_use[RawDataCols.DATE]]
+        match_data.home_team = row[cols_to_use[RawDataCols.HOME_TEAM]]
+        match_data.away_team = row[cols_to_use[RawDataCols.AWAY_TEAM]]
 
-    for col in cols_to_use:
-        values = parsed_csv[col].values
-        for val in values:
-            print(str(col) + ' --------> ' + str(val))
+        match_data.full_time_home_goals = row[cols_to_use[RawDataCols.FTHG]]
+        match_data.full_time_away_goals = row[cols_to_use[RawDataCols.FTAG]]
+
+        # pick one - try catch it
+        try:
+            match_data.full_time_result = results_parser[row[cols_to_use[RawDataCols.FTR]]]
+        except KeyError:
+            match_data.full_time_result = results_parser[row[cols_to_use[RawDataCols.RES]]]
+
+        match_data.half_time_home_goals = row[cols_to_use[RawDataCols.HTHG]]
+        match_data.half_time_away_goals = row[cols_to_use[RawDataCols.HTAG]]
+
+        match_data.half_time_result = results_parser[row[cols_to_use[RawDataCols.HTR]]]
+
+        match_data.attendance = row[cols_to_use[RawDataCols.ATTENDANCE]]
+        match_data.home_shots = row[cols_to_use[RawDataCols.HS]]
+        match_data.away_shots = row[cols_to_use[RawDataCols.AS]]
+        match_data.home_woodwork_hits = row[cols_to_use[RawDataCols.HHW]]
+        match_data.away_woodwork_hits = row[cols_to_use[RawDataCols.AHW]]
+        match_data.home_corners = row[cols_to_use[RawDataCols.HC]]
+        match_data.away_corners = row[cols_to_use[RawDataCols.AC]]
+        match_data.home_fouls_commited = row[cols_to_use[RawDataCols.HF]]
+        match_data.away_fouls_commited = row[cols_to_use[RawDataCols.AF]]
+        match_data.home_offsides = row[cols_to_use[RawDataCols.HO]]
+        match_data.away_offsides = row[cols_to_use[RawDataCols.AC]]
+        match_data.home_red_cards = row[cols_to_use[RawDataCols.HR]]
+        match_data.away_red_cards = row[cols_to_use[RawDataCols.AR]]
+        match_data.home_yellow_cards = row[cols_to_use[RawDataCols.HY]]
+        match_data.away_yellow_cards = row[cols_to_use[RawDataCols.AY]]
+
+        match_data.save()
+
+        print(match_data)
+        print("---------------------------")

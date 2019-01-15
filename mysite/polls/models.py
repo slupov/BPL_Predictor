@@ -4,7 +4,6 @@ from django.db import models
 # Create your models here.
 
 class MatchRawData(models.Model):
-    # id = models.IntegerField(primary_key=True)
     date = models.DateField(null=True)
     home_team = models.CharField(max_length=60)
     away_team = models.CharField(max_length=60)
@@ -32,8 +31,8 @@ class MatchRawData(models.Model):
 
     def __str__(self):
         return self.home_team + " " +\
-               self.full_time_home_goals +" : " +\
-               self.full_time_away_goals + " " +\
+               str(self.full_time_home_goals) +" : " +\
+               str(self.full_time_away_goals) + " " +\
                self.away_team
 
 
