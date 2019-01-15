@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from polls.Data.Extraction.raw_data_extraction import extract_raw_data
+from polls.Data.Extraction.raw_data_extraction import seed_db_raw_data
 
 urlpatterns = [
     path('', include('polls.urls')),
@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+seed_db_raw_data()
 
-extract_raw_data('../raw_data/BPL_00_01.csv')
 # extract_raw_data('../raw_data/test.csv')

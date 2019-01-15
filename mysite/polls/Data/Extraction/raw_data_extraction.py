@@ -41,6 +41,17 @@ class RawDataCols(IntEnum):
 
 # Returns an array of the column names needed for our raw data table
 
+def seed_db_raw_data():
+    # Clear the database table if it has any logs
+    if MatchRawData.objects.count != 0:
+        MatchRawData.objects.all().delete()
+
+    extract_raw_data('../raw_data/BPL_18_19.csv')
+    extract_raw_data('../raw_data/BPL_17_18.csv')
+    extract_raw_data('../raw_data/BPL_16_17.csv')
+    extract_raw_data('../raw_data/BPL_15_16.csv')
+
+
 def cols_to_extract():
     cols_to_use = [None] * RawDataCols.COUNT
 
@@ -84,55 +95,72 @@ def cols_to_extract():
 # Extracts raw data from the raw data csv and populates the raw match data table in the database
 
 def extract_raw_data(csv):
-    # Clear the database table if it has any logs
-    # if MatchRawData.objects.count != 0:
-    #     MatchRawData.objects.delete()
-
     cols_to_use = cols_to_extract()
+
+    csv_tokens = csv.split("_")
+    csv_tokens[-1] = csv_tokens[-1][:-4]
 
     # Read and parse the csv file
     parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, header=0)
 
-    results_parser={'H': 1, 'D':0, 'A':-1}
+    results_parser = {'H': 1, 'D': 0.5, 'A': 0}
 
     for index, row in parsed_csv.iterrows():
         match_data = MatchRawData()
-        datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
+
+        # pick one of two possible date formats - try catch it
+        try:
+            datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
+        except ValueError:
+            datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%Y')
+
         match_data.date = datetime_object
-        match_data.home_team = row[cols_to_use[RawDataCols.HOME_TEAM]]
-        match_data.away_team = row[cols_to_use[RawDataCols.AWAY_TEAM]]
+        match_data.season = csv_tokens[2] + "/" + csv_tokens[3]
 
-        match_data.full_time_home_goals = row[cols_to_use[RawDataCols.FTHG]]
-        match_data.full_time_away_goals = row[cols_to_use[RawDataCols.FTAG]]
+        match_data.home_team = get_col_value(row, cols_to_use[RawDataCols.HOME_TEAM])
+        match_data.away_team = get_col_value(row, cols_to_use[RawDataCols.AWAY_TEAM])
 
-        # pick one - try catch it
+        match_data.full_time_home_goals = get_col_value(row, cols_to_use[RawDataCols.FTHG])
+        match_data.full_time_away_goals = get_col_value(row, cols_to_use[RawDataCols.FTAG])
+
+        # pick one of two possible table names - try catch it
         try:
             match_data.full_time_result = results_parser[row[cols_to_use[RawDataCols.FTR]]]
         except KeyError:
-            match_data.full_time_result = results_parser[row[cols_to_use[RawDataCols.RES]]]
+            match_data.full_time_result = results_parser[get_col_value(row, cols_to_use[RawDataCols.RES])]
 
-        match_data.half_time_home_goals = row[cols_to_use[RawDataCols.HTHG]]
-        match_data.half_time_away_goals = row[cols_to_use[RawDataCols.HTAG]]
+        match_data.half_time_home_goals = get_col_value(row, cols_to_use[RawDataCols.HTHG])
+        match_data.half_time_away_goals = get_col_value(row, cols_to_use[RawDataCols.HTAG])
 
         match_data.half_time_result = results_parser[row[cols_to_use[RawDataCols.HTR]]]
+        match_data.attendance = get_col_value(row, cols_to_use[RawDataCols.ATTENDANCE])
 
-        match_data.attendance = row[cols_to_use[RawDataCols.ATTENDANCE]]
-        match_data.home_shots = row[cols_to_use[RawDataCols.HS]]
-        match_data.away_shots = row[cols_to_use[RawDataCols.AS]]
-        match_data.home_woodwork_hits = row[cols_to_use[RawDataCols.HHW]]
-        match_data.away_woodwork_hits = row[cols_to_use[RawDataCols.AHW]]
-        match_data.home_corners = row[cols_to_use[RawDataCols.HC]]
-        match_data.away_corners = row[cols_to_use[RawDataCols.AC]]
-        match_data.home_fouls_commited = row[cols_to_use[RawDataCols.HF]]
-        match_data.away_fouls_commited = row[cols_to_use[RawDataCols.AF]]
-        match_data.home_offsides = row[cols_to_use[RawDataCols.HO]]
-        match_data.away_offsides = row[cols_to_use[RawDataCols.AC]]
-        match_data.home_red_cards = row[cols_to_use[RawDataCols.HR]]
-        match_data.away_red_cards = row[cols_to_use[RawDataCols.AR]]
-        match_data.home_yellow_cards = row[cols_to_use[RawDataCols.HY]]
-        match_data.away_yellow_cards = row[cols_to_use[RawDataCols.AY]]
+        match_data.home_shots = get_col_value(row, cols_to_use[RawDataCols.HS])
+        match_data.away_shots = get_col_value(row, cols_to_use[RawDataCols.AS])
+
+        match_data.home_woodwork_hits = get_col_value(row, cols_to_use[RawDataCols.HHW])
+        match_data.away_woodwork_hits = get_col_value(row, cols_to_use[RawDataCols.AHW])
+
+        match_data.home_corners = get_col_value(row, cols_to_use[RawDataCols.HC])
+        match_data.away_corners = get_col_value(row, cols_to_use[RawDataCols.AC])
+        match_data.home_fouls_commited = get_col_value(row, cols_to_use[RawDataCols.HF])
+        match_data.away_fouls_commited = get_col_value(row, cols_to_use[RawDataCols.AF])
+
+        match_data.home_offsides = get_col_value(row, cols_to_use[RawDataCols.HO])
+        match_data.away_offsides = get_col_value(row, cols_to_use[RawDataCols.AC])
+        match_data.home_red_cards = get_col_value(row, cols_to_use[RawDataCols.HR])
+        match_data.away_red_cards = get_col_value(row, cols_to_use[RawDataCols.AR])
+        match_data.home_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.HY])
+        match_data.away_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.AY])
 
         match_data.save()
 
         print(match_data)
         print("---------------------------")
+
+
+def get_col_value(row, col):
+    try:
+        return row[col]
+    except KeyError:
+        return None

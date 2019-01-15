@@ -4,7 +4,11 @@ from django.db import models
 # Create your models here.
 
 class MatchRawData(models.Model):
+    class Meta:
+        unique_together = (('date', 'home_team', 'away_team'),)
+
     date = models.DateField(null=True)
+    season = models.CharField(max_length=5, null=True)
     home_team = models.CharField(max_length=60)
     away_team = models.CharField(max_length=60)
     full_time_home_goals = models.IntegerField()
@@ -36,3 +40,26 @@ class MatchRawData(models.Model):
                self.away_team
 
 
+class ExtractedFixtures(models.Model):
+    class Meta:
+        unique_together = (('season', 'home_team', 'away_team'),)
+
+    season = models.CharField(max_length=5)
+    home_team = models.CharField(max_length=60)
+    away_team = models.CharField(max_length=60)
+    home_form = models.FloatField()
+    away_form = models.FloatField()
+    result = models.FloatField()
+    home_concentration = models.FloatField()
+    away_concentration = models.FloatField()
+    goal_diff = models.FloatField()
+    score_diff = models.FloatField()
+    history = models.FloatField()
+    home_motivation = models.FloatField()
+    away_motivation = models.FloatField()
+
+    def __str__(self):
+        return self.home_team + " " +\
+               str(self.full_time_home_goals) +" : " +\
+               str(self.full_time_away_goals) + " " +\
+               self.away_team
