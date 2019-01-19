@@ -19,8 +19,6 @@ def extract_forms(home_team, away_team, date_played):
     form1 = 0
     form2 = 0
 
-    game_result = 0
-
     home_results_form_parser = {1: 2, 0.5: 1, 0: 0}
     away_results_form_parser = {1: 0, 0.5: 1, 0: 1}
 

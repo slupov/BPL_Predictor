@@ -42,15 +42,21 @@ class RawDataCols(IntEnum):
 # Returns an array of the column names needed for our raw data table
 
 def seed_db_raw_data():
+    print("Started raw data seed.")
     # Clear the database table if it has any logs
     if MatchRawData.objects.count != 0:
-        return
-        # MatchRawData.objects.all().delete()
+        # return
+        MatchRawData.objects.all().delete()
 
-    extract_raw_data('../raw_data/BPL_18_19.csv')
-    extract_raw_data('../raw_data/BPL_17_18.csv')
-    extract_raw_data('../raw_data/BPL_16_17.csv')
-    extract_raw_data('../raw_data/BPL_15_16.csv')
+    raw_data_list = extract_raw_data('../raw_data/BPL_18_19.csv') + \
+                    extract_raw_data('../raw_data/BPL_17_18.csv') + \
+                    extract_raw_data('../raw_data/BPL_16_17.csv') + \
+                    extract_raw_data('../raw_data/BPL_15_16.csv')
+
+    MatchRawData.objects.bulk_create(raw_data_list)
+
+    print("Raw data seed successfully finished.")
+
 
 
 def cols_to_extract():
@@ -106,6 +112,8 @@ def extract_raw_data(csv):
     parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, header=0)
 
     results_parser = {'H': 1, 'D': 0.5, 'A': 0}
+
+    raw_data_list = []
 
     for index, row in parsed_csv.iterrows():
         match_data = MatchRawData()
@@ -163,10 +171,12 @@ def extract_raw_data(csv):
         match_data.home_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.HY])
         match_data.away_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.AY])
 
-        match_data.save()
+        raw_data_list.append(match_data)
 
-        print(match_data)
-        print("---------------------------")
+        # print(match_data)
+        # print("---------------------------")
+
+    return raw_data_list
 
 
 # An utility function that helps to get the value of the csv row and column. Returns None

@@ -59,13 +59,10 @@ class ExtractedFixtures(models.Model):
     away_motivation = models.FloatField()
 
     def __str__(self):
-        return self.home_team + " " + \
-               str(self.full_time_home_goals) + " : " + \
-               str(self.full_time_away_goals) + " " + \
+        return "Season: " + self.season + " " + self.home_team + " " + \
                self.away_team
 
 
-# -------------------------Non-Django models-------------------------
 class SeasonTable:
 
     def __init__(self):
