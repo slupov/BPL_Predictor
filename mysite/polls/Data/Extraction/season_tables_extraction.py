@@ -52,4 +52,38 @@ def get_season_data(season, date):
         teams_season[current_match.home_team].goals_received += \
             current_match.full_time_away_goals
 
+    for team_name in teams_season:
+        teams_season[team_name].position = \
+            get_table_position(team_name, teams_season)
+
     return teams_season
+
+
+def get_table_position(team, season_data):
+    pivot_team = season_data[team]
+
+    teams_with_more_pts = 0
+    teams_with_same_pts_better_gdf = 0
+    teams_with_same_pts_same_gdf_more_scored = 0
+
+    for team_name in season_data:
+        current_team = season_data[team_name]
+        if current_team.team == pivot_team.team:
+            continue
+
+        if current_team.points > pivot_team.points:
+            teams_with_more_pts += 1
+        elif current_team.points == pivot_team.points:
+
+            pivot_goal_diff = pivot_team.goals_scored - pivot_team.goals_received
+            current_goal_diff = current_team.goals_scored - current_team.goals_received
+
+            if current_goal_diff > pivot_goal_diff:
+                teams_with_same_pts_better_gdf += 1
+
+            elif current_goal_diff == pivot_goal_diff and \
+                    current_team.goals_scored > pivot_team.goals_scored:
+                teams_with_same_pts_same_gdf_more_scored += 1
+
+    return 1 + teams_with_more_pts + teams_with_same_pts_better_gdf + \
+           teams_with_same_pts_same_gdf_more_scored

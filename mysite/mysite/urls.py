@@ -28,9 +28,7 @@ urlpatterns = [
 seed_db_raw_data()
 
 # Following test gets the current seasons table as an object
-# test = get_season_data('18/19', '2018-08-19')
-# test = test['Man United']
-#
-# print(test)
+season_data = get_season_data('17/18', '2018-05-13')['Man City']
+print(season_data)
 
 seed_training_model()

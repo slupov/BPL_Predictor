@@ -77,3 +77,4 @@ class SeasonTable:
         self.points = 0
         self.goals_scored = 0
         self.goals_received = 0
+        self.position = 0
