@@ -34,9 +34,9 @@ class MatchRawData(models.Model):
     away_yellow_cards = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.home_team + " " +\
-               str(self.full_time_home_goals) +" : " +\
-               str(self.full_time_away_goals) + " " +\
+        return self.home_team + " " + \
+               str(self.full_time_home_goals) + " : " + \
+               str(self.full_time_away_goals) + " " + \
                self.away_team + " " + str(self.date)
 
 
@@ -59,7 +59,21 @@ class ExtractedFixtures(models.Model):
     away_motivation = models.FloatField()
 
     def __str__(self):
-        return self.home_team + " " +\
-               str(self.full_time_home_goals) +" : " +\
-               str(self.full_time_away_goals) + " " +\
+        return self.home_team + " " + \
+               str(self.full_time_home_goals) + " : " + \
+               str(self.full_time_away_goals) + " " + \
                self.away_team
+
+
+# -------------------------Non-Django models-------------------------
+class SeasonTable:
+
+    def __init__(self):
+        self.season = None
+        self.team = None
+        self.wins = 0
+        self.draws = 0
+        self.losses = 0
+        self.points = 0
+        self.goals_scored = 0
+        self.goals_received = 0

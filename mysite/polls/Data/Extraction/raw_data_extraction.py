@@ -112,9 +112,11 @@ def extract_raw_data(csv):
 
         # pick one of two possible date formats - try catch it
         try:
-            datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
+            datetime_object = \
+                datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
         except ValueError:
-            datetime_object = datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%Y')
+            datetime_object = \
+                datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%Y')
 
         match_data.date = datetime_object
         match_data.season = csv_tokens[2] + "/" + csv_tokens[3]
@@ -122,17 +124,23 @@ def extract_raw_data(csv):
         match_data.home_team = get_col_value(row, cols_to_use[RawDataCols.HOME_TEAM])
         match_data.away_team = get_col_value(row, cols_to_use[RawDataCols.AWAY_TEAM])
 
-        match_data.full_time_home_goals = get_col_value(row, cols_to_use[RawDataCols.FTHG])
-        match_data.full_time_away_goals = get_col_value(row, cols_to_use[RawDataCols.FTAG])
+        match_data.full_time_home_goals = \
+            get_col_value(row, cols_to_use[RawDataCols.FTHG])
+        match_data.full_time_away_goals = \
+            get_col_value(row, cols_to_use[RawDataCols.FTAG])
 
         # pick one of two possible table names - try catch it
         try:
-            match_data.full_time_result = results_parser[row[cols_to_use[RawDataCols.FTR]]]
+            match_data.full_time_result = \
+                results_parser[row[cols_to_use[RawDataCols.FTR]]]
         except KeyError:
-            match_data.full_time_result = results_parser[get_col_value(row, cols_to_use[RawDataCols.RES])]
+            match_data.full_time_result = \
+                results_parser[get_col_value(row, cols_to_use[RawDataCols.RES])]
 
-        match_data.half_time_home_goals = get_col_value(row, cols_to_use[RawDataCols.HTHG])
-        match_data.half_time_away_goals = get_col_value(row, cols_to_use[RawDataCols.HTAG])
+        match_data.half_time_home_goals = \
+            get_col_value(row, cols_to_use[RawDataCols.HTHG])
+        match_data.half_time_away_goals = \
+            get_col_value(row, cols_to_use[RawDataCols.HTAG])
 
         match_data.half_time_result = results_parser[row[cols_to_use[RawDataCols.HTR]]]
         match_data.attendance = get_col_value(row, cols_to_use[RawDataCols.ATTENDANCE])
@@ -161,8 +169,8 @@ def extract_raw_data(csv):
         print("---------------------------")
 
 
-# An utility function that helps to get the value of the csv row and column. Returns None if no
-# such column was found
+# An utility function that helps to get the value of the csv row and column. Returns None
+# if no such column was found
 
 def get_col_value(row, col):
     try:
