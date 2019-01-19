@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from polls.Data.Extraction.raw_data_extraction import seed_db_raw_data
+from polls.Data.Extraction.training_model import seed_training_model
 
 urlpatterns = [
     path('', include('polls.urls')),
@@ -25,4 +26,4 @@ urlpatterns = [
 
 seed_db_raw_data()
 
-# extract_raw_data('../raw_data/test.csv')
+seed_training_model()

@@ -37,7 +37,7 @@ class MatchRawData(models.Model):
         return self.home_team + " " +\
                str(self.full_time_home_goals) +" : " +\
                str(self.full_time_away_goals) + " " +\
-               self.away_team
+               self.away_team + " " + str(self.date)
 
 
 class ExtractedFixtures(models.Model):

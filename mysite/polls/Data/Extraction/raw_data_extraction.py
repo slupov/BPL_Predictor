@@ -44,7 +44,8 @@ class RawDataCols(IntEnum):
 def seed_db_raw_data():
     # Clear the database table if it has any logs
     if MatchRawData.objects.count != 0:
-        MatchRawData.objects.all().delete()
+        return
+        # MatchRawData.objects.all().delete()
 
     extract_raw_data('../raw_data/BPL_18_19.csv')
     extract_raw_data('../raw_data/BPL_17_18.csv')
@@ -92,7 +93,8 @@ def cols_to_extract():
     return cols_to_use
 
 
-# Extracts raw data from the raw data csv and populates the raw match data table in the database
+# Extracts raw data from the raw data csv and populates the raw match data table in the
+# database
 
 def extract_raw_data(csv):
     cols_to_use = cols_to_extract()
@@ -158,6 +160,9 @@ def extract_raw_data(csv):
         print(match_data)
         print("---------------------------")
 
+
+# An utility function that helps to get the value of the csv row and column. Returns None if no
+# such column was found
 
 def get_col_value(row, col):
     try:
