@@ -2,7 +2,8 @@ from ...models import SeasonTables
 from enum import IntEnum
 from datetime import datetime
 import pandas as pd
-from mysite.config import should_truncate_tables, data_start_year, data_end_year
+from mysite.config import should_truncate_tables, data_start_year, data_end_year, \
+    is_debug
 from ...Data.data_mapping import team_names_map
 
 
@@ -88,7 +89,7 @@ def extract_raw_data(csv):
 
         should_print_warning = old_round_start != season_table.round_start
 
-        if days_diff > 7 and should_print_warning:
+        if is_debug and (days_diff > 7 and should_print_warning):
             print("\033[93m WARNING! Season %s, Round start date(%s) and round end "
                   "date(%s) too far apart !!! (%s days difference)\033[0m" %
                   (season_table.season, str(season_table.round_start)[:10],
