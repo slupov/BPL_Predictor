@@ -4,6 +4,7 @@ from ...models import ExtractedFixtures
 from .form_extraction import extract_forms
 from .concentration_extraction import extract_concentration
 from .motivation_extraction import extract_motivation
+from mysite.config import should_truncate_tables
 
 import time
 
@@ -13,8 +14,10 @@ def seed_training_model():
 
     # Clear the database table if it has any logs
     if ExtractedFixtures.objects.count != 0:
-        # return
-        ExtractedFixtures.objects.all().delete()
+        if should_truncate_tables:
+            ExtractedFixtures.objects.all().delete()
+        else:
+            return
 
     # get all seasons in database
     seasons = MatchRawData.objects.all().values_list('season', flat=True).\

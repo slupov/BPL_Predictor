@@ -2,7 +2,7 @@ from ...models import SeasonTables
 from enum import IntEnum
 from datetime import datetime
 import pandas as pd
-from mysite.config import should_truncate_tables
+from mysite.config import should_truncate_tables, data_start_year, data_end_year
 from ...Data.data_mapping import team_names_map
 
 
@@ -31,7 +31,7 @@ def seed_raw_season_tables():
 
     raw_data_list = []
 
-    for i in range(1993, 2019):
+    for i in range(data_start_year, data_end_year):
         season_str = str(i)[2:] + "_" + str((i + 1))[2:]
         file_path = '../raw_data/standings_data/BPL_STANDINGS_' + season_str + '.csv'
         raw_data_list = raw_data_list + extract_raw_data(file_path)
@@ -70,6 +70,8 @@ def extract_raw_data(csv):
 
     raw_data_list = []
 
+    old_round_start = ""
+
     for index, row in parsed_csv.iterrows():
         season_table = SeasonTables()
 
@@ -81,6 +83,18 @@ def extract_raw_data(csv):
                                             "%Y-%m-%d")
 
         season_table.round_end = datetime_object
+
+        days_diff = (season_table.round_end - season_table.round_start).days
+
+        should_print_warning = old_round_start != season_table.round_start
+
+        if days_diff > 7 and should_print_warning:
+            print("\033[93m WARNING! Season %s, Round start date(%s) and round end "
+                  "date(%s) too far apart !!! (%s days difference)\033[0m" %
+                  (season_table.season, str(season_table.round_start)[:10],
+                   str(season_table.round_end)[:10],days_diff))
+
+            old_round_start = season_table.round_start
 
         season_table.season = get_col_value(row, cols_to_use[RawDataCols.SEASON])
 

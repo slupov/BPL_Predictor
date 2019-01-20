@@ -1,7 +1,7 @@
 from ...models import MatchRawData
 from enum import IntEnum
 from datetime import datetime
-from mysite.config import should_truncate_tables
+from mysite.config import should_truncate_tables, data_start_year, data_end_year
 import pandas as pd
 
 
@@ -52,7 +52,7 @@ def seed_raw_match_data():
 
     raw_data_list = []
 
-    for i in range(1993, 2019):
+    for i in range(data_start_year, data_end_year):
         season_str = str(i)[2:] + "_" + str((i + 1))[2:]
         file_path = '../raw_data/BPL_' + season_str + '.csv'
         raw_data_list = raw_data_list + extract_raw_data(file_path)

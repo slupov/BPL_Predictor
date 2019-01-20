@@ -5,10 +5,13 @@ from django.core.exceptions import ObjectDoesNotExist
 def get_team_season_data(season, date, team):
     """" Gets statistics for given team before the given date. Returns None if it did not
          find any statistics """
-    try:
-        return SeasonTables.objects.get(season=season, team=team, round_end__lt=date)
-    except ObjectDoesNotExist:
+    result =  SeasonTables.objects.all().filter(
+            season=season, team=team, round_end__lt=date).order_by('-round_end')
+
+    if result.count() <= 0:
         return None
+
+    return result[0]
 
 
 def get_season_data(season, date):
