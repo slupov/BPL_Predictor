@@ -141,8 +141,9 @@ def scrape_round(round, season, writer):
     for table_state in statistics:
         writer.writerow([get_original_seasons_string(season), table_state.team, dates[0],
                          dates[1], table_state.wins,
-                         table_state.draws, table_state.losses, table_state.goals_scored,
-                         table_state.goals_received, table_state.position])
+                         table_state.draws, table_state.losses, table_state.points,
+                         table_state.goals_scored, table_state.goals_received,
+                         table_state.position])
 
         print(get_original_seasons_string(season), table_state.team, dates[0], dates[1],
               table_state.wins,

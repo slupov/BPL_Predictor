@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from polls.Data.Extraction.raw_data_extraction import seed_db_raw_data
-from polls.Data.Extraction.season_tables_extraction import get_season_data
+
+from polls.Data.Extraction.raw_match_data_seed import seed_raw_match_data
+from polls.Data.Extraction.raw_season_tables_seed import seed_raw_season_tables
+
 from polls.Data.Extraction.training_model import seed_training_model
 from polls.Data.Extraction.concentration_extraction import extract_concentration
 from polls.Data.Extraction.Web.scrape_league_standings import scrape_league_standings
@@ -31,24 +33,26 @@ urlpatterns = [
 ]
 
 start_time = time.time()
-seed_db_raw_data()
-print("Raw data seed took %s seconds to finish." % (time.time() - start_time))
-
+scrape_league_standings()
+print("Team standings scraping took %s seconds to finish.\n" % (time.time() - start_time))
 
 start_time = time.time()
-scrape_league_standings()
-print("Team standings scraping took %s seconds to finish." % (time.time() - start_time))
+seed_raw_match_data()
+print("Raw match data seed took %s seconds to finish.\n" % (time.time() - start_time))
 
+start_time = time.time()
+seed_raw_season_tables()
+print("Raw season tables seed took %s seconds to finish.\n" % (time.time() - start_time))
 
-# start_time = time.time()
+start_time = time.time()
 # seed_training_model()
-# print("Training model data seed took %s seconds to finish." % (time.time() - start_time))
+print("Training model data seed took %s seconds to finish." % (time.time() - start_time))
 
 
 # Following test gets the current seasons table as an object
 # season_data = get_season_data('17/18', '2018-05-13')['Man City']
 # print(season_data)
-
+#
 # print(extract_concentration('Man United', 'Man City', '2017-12-10', '17/18'))
 #
 # print('DEBUG')

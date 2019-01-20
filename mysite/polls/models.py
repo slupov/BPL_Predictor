@@ -34,10 +34,9 @@ class MatchRawData(models.Model):
     away_yellow_cards = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.home_team + " " + \
-               str(self.full_time_home_goals) + " : " + \
-               str(self.full_time_away_goals) + " " + \
-               self.away_team + " " + str(self.date)
+        return "Date: %s Season: %s %s %s:%s %s FTR: %s" \
+              % (self.date, self.season, self.home_team, self.full_time_home_goals,
+                 self.full_time_away_goals, self.away_team, self.full_time_result)
 
 
 class ExtractedFixtures(models.Model):
@@ -69,18 +68,20 @@ class SeasonTables(models.Model):
 
     season = models.CharField(max_length=5)
     team = models.CharField(max_length=60)
-    round_start = models.DateField()
-    round_end = models.DateField()
-    wins = models.IntegerField()
-    draws = models.IntegerField()
-    losses = models.IntegerField()
-    points = models.IntegerField()
-    goals_scored = models.IntegerField()
-    goals_received = models.IntegerField()
-    position = models.IntegerField()
+    round_start = models.DateField(null=True)
+    round_end = models.DateField(null=True)
+    wins = models.IntegerField(null=True)
+    draws = models.IntegerField(null=True)
+    losses = models.IntegerField(null=True)
+    points = models.IntegerField(null=True)
+    goals_scored = models.IntegerField(null=True)
+    goals_received = models.IntegerField(null=True)
+    position = models.IntegerField(null=True)
 
     def __str__(self):
-        return "Season: " + self.season + "Pos: [" + self.position + "] Team: " +\
-               self.team + " Date: " + self.state_date + " W: " + self.wins + " D: " +\
-               self.draws + " L: " +  self.losses + " Pts: " + self.points + " GS: " + \
-               self.goals_scored + " GR: " + self.goals_received
+        return "Season: %s, Pos: [%s], Team: %s, Round dates: %s - %s, W: %s, D: %s, " \
+              "L: %s Pts: %s GS: %s, GR: %s" % \
+              (str(self.season), str(self.position), str(self.team),
+               str(self.round_start), str(self.round_end), str(self.wins),
+               str(self.draws), str(self.losses), str(self.points),
+               str(self.goals_scored), str(self.goals_received))

@@ -38,8 +38,7 @@ def seed_training_model():
 def seed_training_model_season(season, season_matches):
     season_training_model = []
     for curr_match in season_matches:
-        # TODO Stoyan Lupov 19-01-2019 uncomment when it is decided what to do with form
-        # calculations when there are less than 5 matches in a season
+        # calculations when less than 5 matches in a season -> zeroes for missing match
         forms = extract_forms(curr_match.home_team, curr_match.away_team, curr_match.date)
 
         # TODO Stoyan Lupov 19-01-2019 extract_concentration is the BOTTLENECK here.

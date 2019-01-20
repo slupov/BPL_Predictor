@@ -34,6 +34,7 @@ def extract_concentration(home_team, away_team, date, season, season_matches):
     #            season=season).order_by('-date')[:concentration_matches]
 
     #TODO THE REAL BOTTLE NECK
+
     season_data = get_season_data(season, date)
 
     concentration1 = get_team_concentration(home_team, home_team_last_matches,
@@ -53,8 +54,13 @@ def get_team_concentration(team, team_last_matches, season_data, concentration_m
     for curr_match in team_last_matches:
         game_result = curr_match.full_time_result
 
-        position_diff = season_data[curr_match.home_team].position - \
-                        season_data[curr_match.away_team].position
+        home_team_season_data = \
+            [a for a in season_data if a.team == curr_match.home_team][0]
+        away_team_season_data = \
+            [a for a in season_data if a.team == curr_match.away_team][0]
+
+        position_diff = abs(home_team_season_data.position -
+                            away_team_season_data.position)
 
         # check if home_team played at home or away
         if curr_match.home_team == team:

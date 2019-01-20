@@ -1,6 +1,7 @@
 from ...models import MatchRawData
 from enum import IntEnum
 from datetime import datetime
+from mysite.config import should_truncate_tables
 import pandas as pd
 
 
@@ -41,22 +42,22 @@ class RawDataCols(IntEnum):
 
 # Returns an array of the column names needed for our raw data table
 
-def seed_db_raw_data():
-    print("Started raw data seed.")
+def seed_raw_match_data():
     # Clear the database table if it has any logs
     if MatchRawData.objects.count != 0:
-        # return
-        MatchRawData.objects.all().delete()
+        if should_truncate_tables:
+            MatchRawData.objects.all().delete()
+        else:
+            return
 
-    raw_data_list = extract_raw_data('../raw_data/BPL_18_19.csv') + \
-                    extract_raw_data('../raw_data/BPL_17_18.csv') + \
-                    extract_raw_data('../raw_data/BPL_16_17.csv') + \
-                    extract_raw_data('../raw_data/BPL_15_16.csv')
+    raw_data_list = []
+
+    for i in range(1993, 2019):
+        season_str = str(i)[2:] + "_" + str((i + 1))[2:]
+        file_path = '../raw_data/BPL_' + season_str + '.csv'
+        raw_data_list = raw_data_list + extract_raw_data(file_path)
 
     MatchRawData.objects.bulk_create(raw_data_list)
-
-    print("Raw data seed successfully finished.")
-
 
 
 def cols_to_extract():
@@ -111,20 +112,19 @@ def extract_raw_data(csv):
     # Read and parse the csv file
     parsed_csv = pd.read_csv(csv, sep=',', delim_whitespace=False, header=0)
 
-    results_parser = {'H': 1, 'D': 0.5, 'A': 0}
+    results_parser = {'H': 1, 'D': 0.5, 'A': 0, None: None}
 
     raw_data_list = []
 
     for index, row in parsed_csv.iterrows():
         match_data = MatchRawData()
 
-        # pick one of two possible date formats - try catch it
         try:
-            datetime_object = \
-                datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%y')
+            datetime_object = datetime.strptime(
+                get_col_value(row, cols_to_use[RawDataCols.DATE]), '%d/%m/%y')
         except ValueError:
-            datetime_object = \
-                datetime.strptime(row[cols_to_use[RawDataCols.DATE]], '%d/%m/%Y')
+            datetime_object = datetime.strptime(
+                get_col_value(row, cols_to_use[RawDataCols.DATE]), '%d/%m/%Y')
 
         match_data.date = datetime_object
         match_data.season = csv_tokens[2] + "/" + csv_tokens[3]
@@ -142,15 +142,18 @@ def extract_raw_data(csv):
             match_data.full_time_result = \
                 results_parser[row[cols_to_use[RawDataCols.FTR]]]
         except KeyError:
+            print("No FTR found, trying with Res")
             match_data.full_time_result = \
-                results_parser[get_col_value(row, cols_to_use[RawDataCols.RES])]
+                results_parser[row[cols_to_use[RawDataCols.RES]]]
 
         match_data.half_time_home_goals = \
             get_col_value(row, cols_to_use[RawDataCols.HTHG])
         match_data.half_time_away_goals = \
             get_col_value(row, cols_to_use[RawDataCols.HTAG])
 
-        match_data.half_time_result = results_parser[row[cols_to_use[RawDataCols.HTR]]]
+        match_data.half_time_result = \
+            results_parser[get_col_value(row, cols_to_use[RawDataCols.HTR])]
+
         match_data.attendance = get_col_value(row, cols_to_use[RawDataCols.ATTENDANCE])
 
         match_data.home_shots = get_col_value(row, cols_to_use[RawDataCols.HS])
@@ -183,7 +186,16 @@ def extract_raw_data(csv):
 # if no such column was found
 
 def get_col_value(row, col):
+    result = ""
+
     try:
-        return row[col]
+        result = row[col]
+
+        # check for NaN's
+        if result != result:
+            return None
+
+        return result
     except KeyError:
+        # no such column found in the csv
         return None
