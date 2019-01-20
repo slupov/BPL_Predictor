@@ -3,6 +3,7 @@ from enum import IntEnum
 from datetime import datetime
 import pandas as pd
 from mysite.config import should_truncate_tables
+from ...Data.data_mapping import team_names_map
 
 
 class RawDataCols(IntEnum):
@@ -82,7 +83,10 @@ def extract_raw_data(csv):
         season_table.round_end = datetime_object
 
         season_table.season = get_col_value(row, cols_to_use[RawDataCols.SEASON])
-        season_table.team = get_col_value(row, cols_to_use[RawDataCols.TEAM])
+
+        season_table.team = \
+            team_names_map[get_col_value(row, cols_to_use[RawDataCols.TEAM])]
+
         season_table.wins = get_col_value(row, cols_to_use[RawDataCols.WINS])
         season_table.draws = get_col_value(row, cols_to_use[RawDataCols.DRAWS])
         season_table.losses = get_col_value(row, cols_to_use[RawDataCols.LOSSES])

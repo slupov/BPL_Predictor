@@ -47,5 +47,6 @@ team_names_map = {
     "West Ham United": "West Ham",
     "Wigan Athletic": "Wigan",
     "Wimbledon FC": "Wimbledon",
-    "Wolverhampton Wanderers": "Wolves"
+    "Wolverhampton Wanderers": "Wolves",
+    None : None
 }

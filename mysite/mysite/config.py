@@ -1,1 +1,1 @@
-should_truncate_tables = True
+should_truncate_tables = False
