@@ -63,15 +63,24 @@ class ExtractedFixtures(models.Model):
                self.away_team
 
 
-class SeasonTable:
+class SeasonTables(models.Model):
+    class Meta:
+        unique_together = (('season', 'team', 'round_start', 'round_end'))
 
-    def __init__(self):
-        self.season = None
-        self.team = None
-        self.wins = 0
-        self.draws = 0
-        self.losses = 0
-        self.points = 0
-        self.goals_scored = 0
-        self.goals_received = 0
-        self.position = 0
+    season = models.CharField(max_length=5)
+    team = models.CharField(max_length=60)
+    round_start = models.DateField()
+    round_end = models.DateField()
+    wins = models.IntegerField()
+    draws = models.IntegerField()
+    losses = models.IntegerField()
+    points = models.IntegerField()
+    goals_scored = models.IntegerField()
+    goals_received = models.IntegerField()
+    position = models.IntegerField()
+
+    def __str__(self):
+        return "Season: " + self.season + "Pos: [" + self.position + "] Team: " +\
+               self.team + " Date: " + self.state_date + " W: " + self.wins + " D: " +\
+               self.draws + " L: " +  self.losses + " Pts: " + self.points + " GS: " + \
+               self.goals_scored + " GR: " + self.goals_received

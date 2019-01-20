@@ -22,21 +22,22 @@ def extract_forms(home_team, away_team, date_played):
     home_results_form_parser = {1: 2, 0.5: 1, 0: 0}
     away_results_form_parser = {1: 0, 0.5: 1, 0: 1}
 
-    for x in range(0, form_matches_count):
-        game_result = home_last_matches[x].full_time_result
+    for home_team_match in home_last_matches:
+        game_result = home_team_match.full_time_result
 
         # check if home_team played at home or away
-        if home_last_matches[x].home_team == home_team:
+        if home_team_match.home_team == home_team:
             # played at home
             form1 += home_results_form_parser[game_result]
         else:
             # played away
             form1 += away_results_form_parser[game_result]
 
-        game_result = away_last_matches[x].full_time_result
+    for away_team_match in away_last_matches:
+        game_result = away_team_match.full_time_result
 
-        # check if away_team played at home or away
-        if away_last_matches[x].home_team == away_team:
+        # check if home_team played at home or away
+        if away_team_match.home_team == away_team:
             # played at home
             form2 += home_results_form_parser[game_result]
         else:

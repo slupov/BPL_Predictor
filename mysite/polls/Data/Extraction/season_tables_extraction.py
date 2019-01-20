@@ -1,4 +1,4 @@
-from ...models import MatchRawData, SeasonTable
+from ...models import MatchRawData, SeasonTables
 
 
 # param date - the date of the state of the season table we want to get

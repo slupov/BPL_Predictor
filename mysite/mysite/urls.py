@@ -19,6 +19,9 @@ from polls.Data.Extraction.raw_data_extraction import seed_db_raw_data
 from polls.Data.Extraction.season_tables_extraction import get_season_data
 from polls.Data.Extraction.training_model import seed_training_model
 from polls.Data.Extraction.concentration_extraction import extract_concentration
+from polls.Data.Extraction.Web.scrape_league_standings import scrape_league_standings
+
+
 import time
 
 urlpatterns = [
@@ -31,9 +34,15 @@ start_time = time.time()
 seed_db_raw_data()
 print("Raw data seed took %s seconds to finish." % (time.time() - start_time))
 
+
 start_time = time.time()
-seed_training_model()
-print("Training model data seed took %s seconds to finish." % (time.time() - start_time))
+scrape_league_standings()
+print("Team standings scraping took %s seconds to finish." % (time.time() - start_time))
+
+
+# start_time = time.time()
+# seed_training_model()
+# print("Training model data seed took %s seconds to finish." % (time.time() - start_time))
 
 
 # Following test gets the current seasons table as an object
