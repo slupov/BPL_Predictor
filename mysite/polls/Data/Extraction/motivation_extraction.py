@@ -44,7 +44,7 @@ def get_dist(position):
 
 def get_tours_left(team_name, season, date_played):
     return MatchRawData.objects.all().filter(Q(home_team=team_name) | Q(away_team=team_name), season=season,
-                                             date__gt=date_played).count()
+                                             date__gte=date_played).count()
 
 
 def get_tour(left):
