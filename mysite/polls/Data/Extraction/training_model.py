@@ -62,12 +62,13 @@ def seed_training_model_season(season, season_matches):
 
 
         extracted_fixture = ExtractedFixtures()
+
         extracted_fixture.season = season
         extracted_fixture.home_team = curr_match.home_team
         extracted_fixture.away_team = curr_match.away_team
-        extracted_fixture.home_form = forms[0] # TODO Add real value
-        extracted_fixture.away_form = forms[1] # TODO Add real value
-        extracted_fixture.result = 0 # TODO Add real value
+        extracted_fixture.home_form = forms[0]
+        extracted_fixture.away_form = forms[1]
+        extracted_fixture.result = curr_match.full_time_result # TODO Check if thats correct to use here
         extracted_fixture.home_concentration = concentrations[0]
         extracted_fixture.away_concentration = concentrations[1]
         extracted_fixture.goal_diff = 0 # TODO Add real value

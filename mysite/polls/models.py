@@ -58,8 +58,13 @@ class ExtractedFixtures(models.Model):
     away_motivation = models.FloatField()
 
     def __str__(self):
-        return "Season: " + self.season + " " + self.home_team + " " + \
-               self.away_team
+        return "Season: %s, HT: %s AT: %s, HomeForm: %s, AwayForm: %s, Res: %s, " \
+               "HomeConc: %s, AwayConc: %s, GoalDiff: %s, ScoreDiff: %s, History: %s " \
+               "HomeMotiv: %s, AwayMotiv: %s" % \
+               (self.season, self.home_team, self.away_team, self.home_form,
+                self.away_form, self.result, self.home_concentration,
+                self.away_concentration, self.goal_diff, self.score_diff, self.history,
+                self.home_motivation, self.away_motivation)
 
 
 class SeasonTables(models.Model):
