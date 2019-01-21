@@ -1,6 +1,4 @@
-from ...models import MatchRawData
 from .season_tables_extraction import get_season_data
-from django.db.models import Q
 
 
 def extract_concentration(home_team, away_team, date, season, season_matches):
@@ -17,23 +15,11 @@ def extract_concentration(home_team, away_team, date, season, season_matches):
     home_team_last_matches = home_team_last_matches[:concentration_matches]
     home_team_last_matches.sort(key=lambda x: x.date, reverse=True)
 
-
-
     away_team_last_matches = [x for x in season_matches
                               if (x.home_team == away_team or x.away_team == away_team)
                               and x.date < date and x.season == season]
     away_team_last_matches = away_team_last_matches[:concentration_matches]
     away_team_last_matches.sort(key=lambda x: x.date, reverse=True)
-
-    # home_team_last_matches = MatchRawData.objects.all(). \
-    #     filter(Q(home_team=home_team) | Q(away_team=home_team), date__lt=date,
-    #            season=season).order_by('-date')[:concentration_matches]
-    #
-    # away_team_last_matches = MatchRawData.objects.all(). \
-    #     filter(Q(home_team=away_team) | Q(away_team=away_team), date__lt=date,
-    #            season=season).order_by('-date')[:concentration_matches]
-
-    #TODO THE REAL BOTTLE NECK
 
     season_data = get_season_data(season, date)
 

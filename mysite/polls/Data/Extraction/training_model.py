@@ -4,7 +4,8 @@ from ...models import ExtractedFixtures
 from .form_extraction import extract_forms
 from .concentration_extraction import extract_concentration
 from .motivation_extraction import extract_motivation
-from mysite.config import should_truncate_tables
+from mysite.config import recalculate_training_table
+from ..Extraction.history_extraction import extract_history
 
 import time
 
@@ -14,7 +15,7 @@ def seed_training_model():
 
     # Clear the database table if it has any logs
     if ExtractedFixtures.objects.count != 0:
-        if should_truncate_tables:
+        if recalculate_training_table:
             ExtractedFixtures.objects.all().delete()
         else:
             return
@@ -40,12 +41,11 @@ def seed_training_model():
 
 def seed_training_model_season(season, season_matches):
     season_training_model = []
+    all_matches = MatchRawData.objects.all().order_by('-date')
+
     for curr_match in season_matches:
         # calculations when less than 5 matches in a season -> zeroes for missing match
         forms = extract_forms(curr_match.home_team, curr_match.away_team, curr_match.date)
-
-        # TODO Stoyan Lupov 19-01-2019 extract_concentration is the BOTTLENECK here.
-        # Too slow
 
         start_time = time.time()
         concentrations = extract_concentration(curr_match.home_team, curr_match.away_team,
@@ -72,11 +72,11 @@ def seed_training_model_season(season, season_matches):
         extracted_fixture.away_concentration = concentrations[1]
         extracted_fixture.goal_diff = 0 # TODO Add real value
         extracted_fixture.score_diff = 0 # TODO Add real value
-        extracted_fixture.history = 0 # TODO Add real value
+        extracted_fixture.history = extract_history(
+            curr_match.home_team, curr_match.away_team, curr_match.date, all_matches)
         extracted_fixture.home_motivation = motivations[0]
         extracted_fixture.away_motivation = motivations[1]
 
         season_training_model.append(extracted_fixture)
-        # print(extracted_fixture)
 
     return season_training_model
