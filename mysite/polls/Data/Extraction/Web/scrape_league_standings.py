@@ -154,7 +154,7 @@ def scrape_round(round, season, writer):
 def scrape_league_standings():
     # get all seasons in database
     seasons = []
-    raw_match_data_path = "../raw_data"
+    raw_match_data_path = r"../raw_data"
 
     # use seasons that has a match raw data file assigned
     for file in listdir(raw_match_data_path):

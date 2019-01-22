@@ -10,9 +10,9 @@ derbies = {'Arsenal': {'Tottenham', 'Chelsea'},
            }
 
 
-def extract_motivation(home_team, away_team, date_played):
-    season = MatchRawData.objects.all().\
-        filter(date=date_played, home_team=home_team, away_team=away_team)[0].season
+def extract_motivation(home_team, away_team, date_played, season):
+    # season = MatchRawData.objects.all().\
+    #     filter(date=date_played, home_team=home_team, away_team=away_team)[0].season
 
     derby = get_derby_score(home_team, away_team)
 

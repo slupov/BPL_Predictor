@@ -56,7 +56,7 @@ def seed_training_model_season(season, season_matches):
 
         start_time = time.time()
         motivations = extract_motivation(curr_match.home_team, curr_match.away_team,
-                                         curr_match.date)
+                                         curr_match.date, season)
         print("Extract motivation took %s seconds" % (time.time() - start_time))
         print("\n")
 
