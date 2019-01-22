@@ -6,6 +6,7 @@ from .concentration_extraction import extract_concentration
 from .motivation_extraction import extract_motivation
 from mysite.config import recalculate_training_table
 from ..Extraction.history_extraction import extract_history
+from .goal_score_diff_extraction import goal_diff_extraction, score_diff_extraction
 
 import time
 
@@ -21,13 +22,13 @@ def seed_training_model():
             return
 
     # get all seasons in database
-    seasons = MatchRawData.objects.all().values_list('season', flat=True).\
+    seasons = MatchRawData.objects.all().values_list('season', flat=True). \
         distinct('season')
 
     training_model = []
 
     for season in seasons:
-        print("------------------------------",season,"------------------------------")
+        print("------------------------------", season, "------------------------------")
 
         season_matches = MatchRawData.objects.all().filter(season=season)
 
@@ -60,6 +61,17 @@ def seed_training_model_season(season, season_matches):
         print("Extract motivation took %s seconds" % (time.time() - start_time))
         print("\n")
 
+        start_time = time.time()
+        goaldiff = goal_diff_extraction(curr_match.home_team, curr_match.away_team,
+                                        curr_match.date, season)
+        print("Extract goal difference took %s seconds" % (time.time() - start_time))
+        print("\n")
+
+        start_time = time.time()
+        scorediff = score_diff_extraction(curr_match.home_team, curr_match.away_team,
+                                          curr_match.date, season)
+        print("Extract goal difference took %s seconds" % (time.time() - start_time))
+        print("\n")
 
         extracted_fixture = ExtractedFixtures()
 
@@ -68,11 +80,11 @@ def seed_training_model_season(season, season_matches):
         extracted_fixture.away_team = curr_match.away_team
         extracted_fixture.home_form = forms[0]
         extracted_fixture.away_form = forms[1]
-        extracted_fixture.result = curr_match.full_time_result # TODO Check if thats correct to use here
+        extracted_fixture.result = curr_match.full_time_result  # TODO Check if thats correct to use here
         extracted_fixture.home_concentration = concentrations[0]
         extracted_fixture.away_concentration = concentrations[1]
-        extracted_fixture.goal_diff = 0 # TODO Add real value
-        extracted_fixture.score_diff = 0 # TODO Add real value
+        extracted_fixture.goal_diff = goaldiff
+        extracted_fixture.score_diff = scorediff
         extracted_fixture.history = extract_history(
             curr_match.home_team, curr_match.away_team, curr_match.date, all_matches)
         extracted_fixture.home_motivation = motivations[0]
