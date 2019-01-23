@@ -22,6 +22,8 @@ def analyze_data():
                                             filter(season__gte="17/18"). \
                                             order_by('season', 'home_team').values(),
                                             exclude=['id'])
+    le = preprocessing.LabelEncoder()
+    all_data_df['result'] = le.fit_transform(all_data_df['result'])
 
     generate_dependecy_graphs(all_data_df)
 
@@ -35,25 +37,21 @@ def analyze_data():
 
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=0)
 
-    scaler = MinMaxScaler()
-
+    # scaler = MinMaxScaler()
+    #
     # X_train = scaler.fit_transform(X_train)
     # X_test = scaler.transform(X_test)
 
     # BUILDING MODELS
 
     # -----------> logistic regression
-    # BUG: Throws some error because it expects classifiers not floats
-    # see solution here : https://stackoverflow.com/questions/41925157/logisticregression-unknown-label-type-continuous-using-sklearn-in-python
-    # logistic_regression(X_train, Y_train, X_test, Y_test)
+    logistic_regression(X_train, Y_train, X_test, Y_test)
 
     # -----------> decision_tree
-    # BUG: Same as above
-    # decision_tree(X_train, Y_train, X_test, Y_test)
+    decision_tree(X_train, Y_train, X_test, Y_test)
 
-    # -----------> decision_tree
-    # BUG: Same as above
-    # k_neighbours(X_train, Y_train, X_test, Y_test)
+    # -----------> k neighbours
+    k_neighbours(X_train, Y_train, X_test, Y_test)
 
     # TODO Test for the rest from
     # https://towardsdatascience.com/solving-a-simple-classification-problem-with-python-fruits-lovers-edition-d20ab6b071d2?fbclid=IwAR0kByuLFgCf3-pFw3Ff45g7I_e_yma0uxBmhilj2PA5m2RxShClYP-rSXM
@@ -63,7 +61,7 @@ def analyze_data():
 
 
 def logistic_regression(X_train, Y_train, X_test, Y_test):
-    logreg = LogisticRegression()
+    logreg = LogisticRegression(solver='lbfgs', multi_class='auto')
     logreg.fit(X_train, Y_train)
 
     print('Accuracy of Logistic regression classifier on training set: {:.2f}'
