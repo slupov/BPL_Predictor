@@ -7,36 +7,86 @@ from .dependence_graphs import generate_dependecy_graphs
 from ...models import ExtractedFixtures
 
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+from sklearn import preprocessing
+from sklearn import utils
 
 
 def analyze_data():
-    all_data = ExtractedFixtures.objects.all().order_by('season', 'home_team')
+    all_data_df = pd.DataFrame.from_records(ExtractedFixtures.objects.all(). \
+                                            filter(season__gte="17/18"). \
+                                            order_by('season', 'home_team').values(),
+                                            exclude=['id'])
 
-    train_data = [x for x in all_data if x.season == "17/18"]
-    test_data = [x for x in all_data if x.season == "18/19"]
-
-    train_df = pd.DataFrame.from_records(
-        ExtractedFixtures.objects.all().filter(season="17/18").values(), exclude=['id'])
-
-    test_df = pd.DataFrame.from_records(
-        ExtractedFixtures.objects.all().filter(season="18/19").values(), exclude=['id'])
+    generate_dependecy_graphs(all_data_df)
 
     feature_names = ['result', 'goal_diff', 'score_diff']
+    X = all_data_df[feature_names]
+    Y = all_data_df['result']
+
+    generate_scatter_matrix(X, Y)
 
     # apply min max normalization scaling to data
+
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=0)
+
     scaler = MinMaxScaler()
 
-    X_train = train_df[feature_names]
-    Y_train = train_df['result']
+    # X_train = scaler.fit_transform(X_train)
+    # X_test = scaler.transform(X_test)
 
-    X_train_normalized = scaler.fit_transform(X_train)
+    # BUILDING MODELS
 
-    generate_dependecy_graphs(train_df)
-    generate_scatter_matrix(X_train, Y_train)
+    # -----------> logistic regression
+    # BUG: Throws some error because it expects classifiers not floats
+    # see solution here : https://stackoverflow.com/questions/41925157/logisticregression-unknown-label-type-continuous-using-sklearn-in-python
+    # logistic_regression(X_train, Y_train, X_test, Y_test)
 
+    # -----------> decision_tree
+    # BUG: Same as above
+    # decision_tree(X_train, Y_train, X_test, Y_test)
+
+    # -----------> decision_tree
+    # BUG: Same as above
+    # k_neighbours(X_train, Y_train, X_test, Y_test)
+
+    # TODO Test for the rest from
+    # https://towardsdatascience.com/solving-a-simple-classification-problem-with-python-fruits-lovers-edition-d20ab6b071d2?fbclid=IwAR0kByuLFgCf3-pFw3Ff45g7I_e_yma0uxBmhilj2PA5m2RxShClYP-rSXM
     # poisson_distribution(train_df, test_df)
 
     print("debug")
+
+
+def logistic_regression(X_train, Y_train, X_test, Y_test):
+    logreg = LogisticRegression()
+    logreg.fit(X_train, Y_train)
+
+    print('Accuracy of Logistic regression classifier on training set: {:.2f}'
+          .format(logreg.score(X_train, Y_train)))
+    print('Accuracy of Logistic regression classifier on test set: {:.2f}'
+          .format(logreg.score(X_test, Y_test)))
+
+
+def decision_tree(X_train, Y_train, X_test, Y_test):
+    clf = DecisionTreeClassifier().fit(X_train, Y_train)
+    print('Accuracy of Decision Tree classifier on training set: {:.2f}'
+          .format(clf.score(X_train, Y_train)))
+    print('Accuracy of Decision Tree classifier on test set: {:.2f}'
+          .format(clf.score(X_test, Y_test)))
+
+
+def k_neighbours(X_train, Y_train, X_test, Y_test):
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, Y_train)
+    print('Accuracy of K-NN classifier on training set: {:.2f}'
+          .format(knn.score(X_train, Y_train)))
+    print('Accuracy of K-NN classifier on test set: {:.2f}'
+          .format(knn.score(X_test, Y_test)))
 
 
 def poisson_distribution(train_df, test_df):
