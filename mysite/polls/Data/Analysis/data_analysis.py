@@ -1,12 +1,12 @@
-import numpy as np
 import pandas as pd
+from matplotlib import cm
 from matplotlib import pyplot as plt
+from pandas.plotting import scatter_matrix
+
+from .dependence_graphs import generate_dependecy_graphs
 from ...models import ExtractedFixtures
 
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn import datasets
-import numpy as np
-from scipy.stats import poisson, skellam
+from sklearn.preprocessing import MinMaxScaler
 
 
 def analyze_data():
@@ -21,7 +21,20 @@ def analyze_data():
     test_df = pd.DataFrame.from_records(
         ExtractedFixtures.objects.all().filter(season="18/19").values(), exclude=['id'])
 
-    poisson_distribution(train_df, test_df)
+    feature_names = ['result', 'goal_diff', 'score_diff']
+
+    # apply min max normalization scaling to data
+    scaler = MinMaxScaler()
+
+    X_train = train_df[feature_names]
+    Y_train = train_df['result']
+
+    X_train_normalized = scaler.fit_transform(X_train)
+
+    generate_dependecy_graphs(train_df)
+    generate_scatter_matrix(X_train, Y_train)
+
+    # poisson_distribution(train_df, test_df)
 
     print("debug")
 
@@ -65,3 +78,12 @@ def poisson_distribution(train_df, test_df):
     # plt.show()
 
     print("debug")
+
+
+def generate_scatter_matrix(trainX, trainY):
+    cmap = cm.get_cmap('gnuplot')
+    scatter = scatter_matrix(trainX, c=trainY, marker='o', s=40, hist_kwds={'bins': 15},
+                             figsize=(9, 9), cmap=cmap)
+
+    plt.suptitle('Scatter-matrix for each input variable')
+    plt.savefig('extracted_fixtures_scatter_matrix')
