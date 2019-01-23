@@ -23,11 +23,12 @@ def analyze_data():
                                             order_by('season', 'home_team').values(),
                                             exclude=['id'])
     le = preprocessing.LabelEncoder()
-    all_data_df['result'] = le.fit_transform(all_data_df['result'])
-
+    all_data_df['home_team'] = le.fit_transform(all_data_df['home_team'])
+    all_data_df['away_team'] = le.fit_transform(all_data_df['away_team'])
+    all_data_df['result']=le.fit_transform(all_data_df['result'])
     generate_dependecy_graphs(all_data_df)
 
-    feature_names = ['result', 'goal_diff', 'score_diff']
+    feature_names = ['home_team','away_team', 'goal_diff', 'score_diff']
     X = all_data_df[feature_names]
     Y = all_data_df['result']
 
