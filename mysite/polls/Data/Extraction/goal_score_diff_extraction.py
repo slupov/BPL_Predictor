@@ -10,10 +10,10 @@ def goal_diff_extraction(home_team, away_team, date_played, season):
     diff = abs(home_goals - away_goals)
     season_data = get_season_data(season, date_played)
     first_pos_team = get_first_pos_team(season_data)
-    first_team_goals = 0 if first_pos_team is None else first_pos_team.goals_scored
+    first_team_diff = 0 if first_pos_team is None else first_pos_team.goals_scored - first_pos_team.goals_received
     last_pos_team = get_last_pos_team(season_data)
-    last_team_goals = 0 if last_pos_team is None else last_pos_team.goals_scored
-    max_diff = abs(first_team_goals - last_team_goals)
+    last_team_diff = 0 if last_pos_team is None else last_pos_team.goals_scored - last_pos_team.goals_received
+    max_diff = abs(first_team_diff - last_team_diff)
     return calculate_goal_score_diff(diff, max_diff)
 
 
@@ -33,7 +33,8 @@ def score_diff_extraction(home_team, away_team, date_played, season):
 
 
 def calculate_goal_score_diff(diff, max_diff):
-    return 0.5 + diff / (2 * (1 if max_diff == 0 else max_diff))
+    if max_diff==0: return 0.5
+    return 0.5 + diff / (2 *  max_diff)
 
 
 def get_first_pos_team(season_data):
