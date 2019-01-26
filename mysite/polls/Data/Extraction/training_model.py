@@ -6,7 +6,8 @@ from .concentration_extraction import extract_concentration
 from .motivation_extraction import extract_motivation
 from mysite.config import recalculate_training_table
 from ..Extraction.history_extraction import extract_history
-from .goal_score_diff_extraction import goal_diff_extraction, score_diff_extraction
+from .goal_score_diff_extraction import goal_diff_extraction, goal_diff_extraction_2,\
+    score_diff_extraction
 
 import time
 
@@ -64,6 +65,10 @@ def seed_training_model_season(season, season_matches):
         start_time = time.time()
         goaldiff = goal_diff_extraction(curr_match.home_team, curr_match.away_team,
                                         curr_match.date, season)
+
+        # goaldiff = goal_diff_extraction_2(curr_match.home_team, curr_match.away_team,
+        #                                 curr_match.date, season)
+
         print("Extract goal difference took %s seconds" % (time.time() - start_time))
         print("\n")
 

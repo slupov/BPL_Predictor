@@ -9,10 +9,6 @@ TRAIN = 0
 TEST = 1
 
 
-def pad_string(string, empty_row_len):
-    return string.ljust(empty_row_len) + "|\n"
-
-
 class AnalysisModel:
     def __init__(self, all_data_df, feature_names, classificator, model_name):
         self.feature_names = feature_names
@@ -33,18 +29,16 @@ class AnalysisModel:
         self.k_neighbours_avg = [0, 0]
         self.bayes_avg = [0, 0]
 
-        self.empty_row_len = 0
-
     def __str__(self):
         log_reg_avg_str = \
-            "|Accuracy of Logistic regression classifier on {} set: {:.2f}"
+            "|Accuracy of Logistic regression classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
         dec_tree_avg_str = \
-            "|Accuracy of Decision Tree classifier on {} set: {:.2f}"
+            "|Accuracy of Decision Tree classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
-        knn_avg_str = "|Accuracy of K-NN classifier on {} set: {:.2f}"
+        knn_avg_str = "|Accuracy of K-NN classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
-        bayes_avg_str = "|Accuracy of Bayes classifier on {} set: {:.2f}"
+        bayes_avg_str = "|Accuracy of Bayes classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
         header_str = "+------------------- START %s -------------------+\n" % \
                      self.name
@@ -53,47 +47,34 @@ class AnalysisModel:
         empty_row_str = "|                                                        " \
                         "              |\n"
 
-        classificator_str = "|Classificator: '%s" % self.classificator
-        features_str = "|Feature names: %s" % self.feature_names
-
-        self.empty_row_len = len(empty_row_str) - 2
+        classificator_str = "|Classificator: \033[31m'%s'\033[93m\n" % self.classificator
+        features_str = "|Feature names: \033[31m%s\033[93m\n" % self.feature_names
 
         return "\033[93m%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\033[0m" % (
             header_str,
 
-            self.get_string(classificator_str),
-            self.get_string(features_str),
+            classificator_str,
+            features_str,
 
             empty_row_str,
 
-            self.get_string(log_reg_avg_str.format("training",
-                                                   self.logistic_reg_avg[TRAIN])),
-            self.get_string(log_reg_avg_str.format("test",
-                                                   self.logistic_reg_avg[TEST])),
+            log_reg_avg_str.format("training", self.logistic_reg_avg[TRAIN]),
+            log_reg_avg_str.format("test", self.logistic_reg_avg[TEST]),
 
             empty_row_str,
 
-            self.get_string(dec_tree_avg_str.format("training",
-                                                    self.decision_tree_avg[TRAIN])),
-            self.get_string(dec_tree_avg_str.format("test",
-                                                    self.decision_tree_avg[TEST])),
+            dec_tree_avg_str.format("training", self.decision_tree_avg[TRAIN]),
+            dec_tree_avg_str.format("test", self.decision_tree_avg[TEST]),
 
             empty_row_str,
 
-            self.get_string(knn_avg_str.format("training",
-                                               self.k_neighbours_avg[TRAIN])),
-            self.get_string(knn_avg_str.format("test",
-                                               self.k_neighbours_avg[TEST])),
+            knn_avg_str.format("training", self.k_neighbours_avg[TRAIN]),
+            knn_avg_str.format("test", self.k_neighbours_avg[TEST]),
             empty_row_str,
 
-            self.get_string(bayes_avg_str.format("training",
-                                                 self.bayes_avg[TRAIN])),
-            self.get_string(bayes_avg_str.format("test",
-                                                 self.bayes_avg[TEST])),
+            bayes_avg_str.format("training", self.bayes_avg[TRAIN]),
+            bayes_avg_str.format("test", self.bayes_avg[TEST]),
             footer_str)
-
-    def get_string(self, string):
-        return pad_string(string, self.empty_row_len)
 
     def test(self):
         self.logistic_reg_avg[TRAIN] = 0

@@ -4,9 +4,40 @@ import numpy as np
 
 def generate_dependecy_graphs(train_df):
     analyze_form_difference_dependence(train_df)
-    analyze_goal_difference_dependence(train_df)
-    analyze_score_difference_dependence(train_df)
+    # analyze_goal_difference_dependence(train_df)
+    # analyze_score_difference_dependence(train_df)
     analyze_concentration_dependence(train_df)
+
+
+def generate_raw_data_dependency_graphs(train_df):
+    # analyze_yellow_card_dependece(train_df)
+    return
+
+
+def analyze_yellow_card_dependece(train_df):
+    #: score_dif dependence
+    res = []
+    matches_won = len([x for x in train_df['full_time_result'] if x == 1])
+
+    for cnt, row in enumerate(train_df.values):
+        yellow_cards = row[8]
+
+        test1 = train_df['full_time_result']
+        test2 = train_df['home_yellow_cards']
+
+        res.append(sum(
+            [x / matches_won for x, y in zip(train_df['full_time_result'],
+                                             train_df['home_yellow_cards'])
+             if (x == 1 and y < yellow_cards)]))
+
+    plt.figure('Yellow cards plot')
+    plt.plot(train_df['home_yellow_cards'], res, '.')
+
+    plt.xlabel('Yellow cards')
+    plt.ylabel('Win rate')
+
+    # plt.show()
+    plt.savefig('dependence_yellow_cards.png')
 
 
 def analyze_form_difference_dependence(train_df):
@@ -40,7 +71,11 @@ def analyze_goal_difference_dependence(train_df):
 
         zipped = zip(train_df['result'], train_df['goal_diff'])
 
-        res.append(sum([(x / matches_won) for x, y in zipped if (x == 1 and y < dif)]))
+        res.append(sum([x / matches_won for x, y in zipped if (x == 1 and y < dif)]))
+        # for x, y in zipped:
+        #     if x == 1 and y < dif:
+        #         print(x, y)
+        #         print("Kur")
 
     plt.figure('Goal diff plot')
     plt.plot(train_df['goal_diff'], res, '.')

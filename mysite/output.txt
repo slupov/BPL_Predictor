@@ -1,0 +1,156 @@
+Performing system checks...
+
+Team standings scraping took 0.00022935867309570312 seconds to finish.
+
+Raw match data seed took 4.3392181396484375e-05 seconds to finish.
+
+Raw season tables seed took 1.049041748046875e-05 seconds to finish.
+
+Started training model seed.
+Training model data seed took 7.62939453125e-06 seconds to finish.
+[94mStarting extracted data analysis [0m
+[93m+------------------- START EXTRACTED DATA MODEL [0] -------------------+
+|Classificator: 'result                                                |
+|Feature names: ['home_team', 'away_team', 'history']                  |
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.50      |
+|Accuracy of Logistic regression classifier on test set: 0.49          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 0.98            |
+|Accuracy of Decision Tree classifier on test set: 0.44                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.64                     |
+|Accuracy of K-NN classifier on test set: 0.49                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.51                    |
+|Accuracy of Bayes classifier on test set: 0.49                        |
++-------------------- END EXTRACTED DATA MODEL [0] --------------------+
+[0m
+[93m+------------------- START EXTRACTED DATA MODEL [1] -------------------+
+|Classificator: 'result                                                |
+|Feature names: ['home_team', 'away_team', 'home_form', 'away_form']   |
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.51      |
+|Accuracy of Logistic regression classifier on test set: 0.50          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 1.00            |
+|Accuracy of Decision Tree classifier on test set: 0.42                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.64                     |
+|Accuracy of K-NN classifier on test set: 0.47                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.52                    |
+|Accuracy of Bayes classifier on test set: 0.50                        |
++-------------------- END EXTRACTED DATA MODEL [1] --------------------+
+[0m
+[93m+------------------- START EXTRACTED DATA MODEL [2] -------------------+
+|Classificator: 'result                                                |
+|Feature names: ['home_team', 'away_team', 'goal_diff', 'score_diff']  |
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.45      |
+|Accuracy of Logistic regression classifier on test set: 0.49          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 1.00            |
+|Accuracy of Decision Tree classifier on test set: 0.42                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.62                     |
+|Accuracy of K-NN classifier on test set: 0.45                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.46                    |
+|Accuracy of Bayes classifier on test set: 0.49                        |
++-------------------- END EXTRACTED DATA MODEL [2] --------------------+
+[0m
+[93m+------------------- START EXTRACTED DATA MODEL [3] -------------------+
+|Classificator: 'result                                                |
+|Feature names: ['home_team', 'away_team', 'home_concentration', 'away_concentration']|
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.48      |
+|Accuracy of Logistic regression classifier on test set: 0.44          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 0.99            |
+|Accuracy of Decision Tree classifier on test set: 0.38                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.65                     |
+|Accuracy of K-NN classifier on test set: 0.51                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.48                    |
+|Accuracy of Bayes classifier on test set: 0.44                        |
++-------------------- END EXTRACTED DATA MODEL [3] --------------------+
+[0m
+Extracted data analysis ended.
+[94mStarting raw match data analysis [0m
+[93m+------------------- START EXTRACTED RAW DATA MODEL [0] -------------------+
+|Classificator: 'full_time_result                                      |
+|Feature names: ['home_team', 'away_team', 'home_shots', 'away_shots'] |
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.53      |
+|Accuracy of Logistic regression classifier on test set: 0.53          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 1.00            |
+|Accuracy of Decision Tree classifier on test set: 0.37                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.63                     |
+|Accuracy of K-NN classifier on test set: 0.41                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.52                    |
+|Accuracy of Bayes classifier on test set: 0.53                        |
++-------------------- END EXTRACTED RAW DATA MODEL [0] --------------------+
+[0m
+[93m+------------------- START EXTRACTED RAW DATA MODEL [1] -------------------+
+|Classificator: 'full_time_result                                      |
+|Feature names: ['home_team', 'away_team', 'home_fouls_commited', 'away_fouls_commited']|
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.45      |
+|Accuracy of Logistic regression classifier on test set: 0.45          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 1.00            |
+|Accuracy of Decision Tree classifier on test set: 0.35                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.61                     |
+|Accuracy of K-NN classifier on test set: 0.41                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.46                    |
+|Accuracy of Bayes classifier on test set: 0.45                        |
++-------------------- END EXTRACTED RAW DATA MODEL [1] --------------------+
+[0m
+[93m+------------------- START EXTRACTED RAW DATA MODEL [2] -------------------+
+|Classificator: 'full_time_result                                      |
+|Feature names: ['home_team', 'away_team', 'home_yellow_cards', 'away_yellow_cards']|
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.48      |
+|Accuracy of Logistic regression classifier on test set: 0.45          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 1.00            |
+|Accuracy of Decision Tree classifier on test set: 0.35                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.62                     |
+|Accuracy of K-NN classifier on test set: 0.45                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.47                    |
+|Accuracy of Bayes classifier on test set: 0.46                        |
++-------------------- END EXTRACTED RAW DATA MODEL [2] --------------------+
+[0m
+[93m+------------------- START EXTRACTED RAW DATA MODEL [3] -------------------+
+|Classificator: 'full_time_result                                      |
+|Feature names: ['home_team', 'away_team', 'half_time_result']         |
+|                                                                      |
+|Accuracy of Logistic regression classifier on training set: 0.61      |
+|Accuracy of Logistic regression classifier on test set: 0.61          |
+|                                                                      |
+|Accuracy of Decision Tree classifier on training set: 0.98            |
+|Accuracy of Decision Tree classifier on test set: 0.50                |
+|                                                                      |
+|Accuracy of K-NN classifier on training set: 0.69                     |
+|Accuracy of K-NN classifier on test set: 0.50                         |
+|                                                                      |
+|Accuracy of Bayes classifier on training set: 0.61                    |
+|Accuracy of Bayes classifier on test set: 0.61                        |
++-------------------- END EXTRACTED RAW DATA MODEL [3] --------------------+
+[0m
+Extracted raw match data analysis ended.
+Data analysis took 10.435269594192505 seconds to finish.
+System check identified no issues (0 silenced).
+January 26, 2019 - 18:55:20
+Django version 2.1.5, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.

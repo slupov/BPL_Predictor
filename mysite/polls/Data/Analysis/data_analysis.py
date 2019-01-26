@@ -11,14 +11,15 @@ from ...models import MatchRawData
 
 from .analysis_model import AnalysisModel
 
-from .dependence_graphs import generate_dependecy_graphs
+from .dependence_graphs import generate_dependecy_graphs,\
+    generate_raw_data_dependency_graphs
 
 
 def analyze_data():
-    print("\033[31mStarting extracted data analysis \033[0m")
+    print("\033[94mStarting extracted data analysis \033[0m")
     analyze_extracted_data()
 
-    print("\033[31mStarting raw match data analysis \033[0m")
+    print("\033[94mStarting raw match data analysis \033[0m")
     analyze_raw_match_data()
 
 
@@ -34,13 +35,13 @@ def analyze_extracted_data():
     extracted_data_df['away_team'] = le.fit_transform(extracted_data_df['away_team'])
     extracted_data_df['result'] = le.fit_transform(extracted_data_df['result'])
 
-    generate_dependecy_graphs(extracted_data_df)
+    # generate_dependecy_graphs(extracted_data_df)
 
-    feature_names = [['home_team', 'away_team', 'goal_diff', 'score_diff'],
+    feature_names = [['home_team', 'away_team', 'history'],
+                     ['home_team', 'away_team', 'home_form', 'away_form'],
                      ['home_team', 'away_team', 'goal_diff', 'score_diff'],
-                     ['home_team', 'away_team', 'goal_diff', 'score_diff'],
-                     ['home_team', 'away_team', 'goal_diff', 'score_diff'],
-                     ['home_team', 'away_team', 'goal_diff', 'score_diff']]
+                     ['home_team', 'away_team', 'home_motivation', 'away_motivation'],
+                     ['home_team', 'away_team', 'home_concentration', 'away_concentration']]
 
     # BUILDING MODELS
 
@@ -76,7 +77,7 @@ def analyze_raw_match_data():
     extracted_data_df['full_time_result'] = \
         le.fit_transform(extracted_data_df['full_time_result'])
 
-    # generate_dependecy_graphs(extracted_data_df)
+    generate_raw_data_dependency_graphs(extracted_data_df)
 
     feature_names = [
         ['home_team', 'away_team', 'home_shots', 'away_shots'],
@@ -103,8 +104,8 @@ def analyze_raw_match_data():
 
 def generate_scatter_matrix(trainX, trainY, model_type, model_idx):
     cmap = cm.get_cmap('gnuplot')
-    scatter = scatter_matrix(trainX, c=trainY, marker='o', s=40, hist_kwds={'bins': 15},
-                             figsize=(9, 9), cmap=cmap)
+    scatter_matrix(trainX, c=trainY, marker='o', s=40, hist_kwds={'bins': 15},
+                   figsize=(9, 9), cmap=cmap)
 
     plt.suptitle('Scatter-matrix for each input variable')
     plt.savefig('%s_scatter_matrix_%s' % (model_type, model_idx))
