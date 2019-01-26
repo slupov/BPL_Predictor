@@ -15,8 +15,8 @@ from .dependence_graphs import generate_dependecy_graphs
 
 
 def analyze_data():
-    analyze_extracted_data()
-    # analyze_raw_match_data()
+    # analyze_extracted_data()
+    analyze_raw_match_data()
 
 
 def analyze_extracted_data():
@@ -61,26 +61,27 @@ def analyze_raw_match_data():
     le = preprocessing.LabelEncoder()
     extracted_data_df['home_team'] = le.fit_transform(extracted_data_df['home_team'])
     extracted_data_df['away_team'] = le.fit_transform(extracted_data_df['away_team'])
-    extracted_data_df['result'] = le.fit_transform(extracted_data_df['result'])
+    extracted_data_df['full_time_result'] = le.fit_transform(extracted_data_df['full_time_result'])
 
-    generate_dependecy_graphs(extracted_data_df)
+    # generate_dependecy_graphs(extracted_data_df)
 
     feature_names = [
         ['home_team', 'away_team', 'home_shots', 'away_shots'],
-        ['home_team', 'away_team', 'home_fouls_commited', 'away_fouls_commited'],
-        ['home_team', 'away_team', 'home_offsides', 'away_offsides'],
-        ['home_team', 'away_team', 'home_yellow_cards', 'away_yellow_cards'],
+        # ['home_team', 'away_team', 'home_fouls_commited', 'away_fouls_commited'],
+        # ['home_team', 'away_team', 'home_offsides', 'away_offsides'],
+        # ['home_team', 'away_team', 'home_yellow_cards', 'away_yellow_cards'],
         ['home_team', 'away_team', 'half_time_result']]
 
     # BUILDING MODELS
 
-    for i in range(0, 5):
-        model = AnalysisModel(extracted_data_df, feature_names[i], 'result')
+    for i in range(0, 2):
+        model_name="EXTRACTED RAW DATA MODEL [%s]" % i
+        model = AnalysisModel(extracted_data_df, feature_names[i], 'full_time_result',model_name)
         model.test()
         print(model)
 
-        X = extracted_data_df[feature_names]
-        Y = extracted_data_df['result']
+        X = extracted_data_df[feature_names[i]]
+        Y = extracted_data_df['full_time_result']
 
         generate_scatter_matrix(X, Y, "extracted_fixtures", i)
 
