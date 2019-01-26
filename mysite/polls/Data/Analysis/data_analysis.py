@@ -24,6 +24,8 @@ def analyze_extracted_data():
         ExtractedFixtures.objects.all().filter(season__gte="17/18").
             order_by('season', 'home_team').values(), exclude=['id'])
 
+    extracted_data_df.dropna()
+
     le = preprocessing.LabelEncoder()
     extracted_data_df['home_team'] = le.fit_transform(extracted_data_df['home_team'])
     extracted_data_df['away_team'] = le.fit_transform(extracted_data_df['away_team'])
@@ -39,7 +41,7 @@ def analyze_extracted_data():
 
     # BUILDING MODELS
 
-    for i in range(0, 5):
+    for i in range(0, len(feature_names)):
         model_name = "EXTRACTED DATA MODEL [%s]" % i
         model = AnalysisModel(extracted_data_df, feature_names[i], 'result', model_name)
         model.test()
@@ -58,25 +60,33 @@ def analyze_raw_match_data():
         MatchRawData.objects.all().filter(season__gte="17/18").
             order_by('season', 'home_team').values(), exclude=['id'])
 
+    extracted_data_df.dropna()
+
     le = preprocessing.LabelEncoder()
-    extracted_data_df['home_team'] = le.fit_transform(extracted_data_df['home_team'])
-    extracted_data_df['away_team'] = le.fit_transform(extracted_data_df['away_team'])
-    extracted_data_df['full_time_result'] = le.fit_transform(extracted_data_df['full_time_result'])
+
+    extracted_data_df['home_team'] = \
+        le.fit_transform(extracted_data_df['home_team'])
+
+    extracted_data_df['away_team'] = \
+        le.fit_transform(extracted_data_df['away_team'])
+
+    extracted_data_df['full_time_result'] = \
+        le.fit_transform(extracted_data_df['full_time_result'])
 
     # generate_dependecy_graphs(extracted_data_df)
 
     feature_names = [
         ['home_team', 'away_team', 'home_shots', 'away_shots'],
-        # ['home_team', 'away_team', 'home_fouls_commited', 'away_fouls_commited'],
-        # ['home_team', 'away_team', 'home_offsides', 'away_offsides'],
-        # ['home_team', 'away_team', 'home_yellow_cards', 'away_yellow_cards'],
+        ['home_team', 'away_team', 'home_fouls_commited', 'away_fouls_commited'],
+        ['home_team', 'away_team', 'home_yellow_cards', 'away_yellow_cards'],
         ['home_team', 'away_team', 'half_time_result']]
 
     # BUILDING MODELS
 
-    for i in range(0, 2):
+    for i in range(0, len(feature_names)):
         model_name="EXTRACTED RAW DATA MODEL [%s]" % i
-        model = AnalysisModel(extracted_data_df, feature_names[i], 'full_time_result',model_name)
+        model = AnalysisModel(extracted_data_df, feature_names[i], 'full_time_result',
+                              model_name)
         model.test()
         print(model)
 

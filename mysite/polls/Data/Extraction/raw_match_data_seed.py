@@ -78,22 +78,31 @@ def cols_to_extract():
     cols_to_use[RawDataCols.HTAG] = 'HTAG'
     cols_to_use[RawDataCols.HTR] = 'HTR'
     cols_to_use[RawDataCols.ATTENDANCE] = 'Attendance'
+
     cols_to_use[RawDataCols.HS] = 'HS'
     cols_to_use[RawDataCols.AS] = 'AS'
+
     cols_to_use[RawDataCols.HST] = 'HST'
     cols_to_use[RawDataCols.AST] = 'AST'
+
     cols_to_use[RawDataCols.HHW] = 'HHW'
     cols_to_use[RawDataCols.AHW] = 'AHW'
+
     cols_to_use[RawDataCols.HC] = 'HC'
     cols_to_use[RawDataCols.AC] = 'AC'
+
     cols_to_use[RawDataCols.HF] = 'HF'
     cols_to_use[RawDataCols.AF] = 'AF'
+
     cols_to_use[RawDataCols.HFKC] = 'HFKC'
     cols_to_use[RawDataCols.AFKC] = 'AFKC'
+
     cols_to_use[RawDataCols.HO] = 'HO'
     cols_to_use[RawDataCols.AO] = 'AO'
+
     cols_to_use[RawDataCols.HY] = 'HY'
     cols_to_use[RawDataCols.AY] = 'AY'
+
     cols_to_use[RawDataCols.HR] = 'HR'
     cols_to_use[RawDataCols.AR] = 'AR'
 
@@ -164,13 +173,16 @@ def extract_raw_data(csv):
 
         match_data.home_corners = get_col_value(row, cols_to_use[RawDataCols.HC])
         match_data.away_corners = get_col_value(row, cols_to_use[RawDataCols.AC])
+
         match_data.home_fouls_commited = get_col_value(row, cols_to_use[RawDataCols.HF])
         match_data.away_fouls_commited = get_col_value(row, cols_to_use[RawDataCols.AF])
 
         match_data.home_offsides = get_col_value(row, cols_to_use[RawDataCols.HO])
-        match_data.away_offsides = get_col_value(row, cols_to_use[RawDataCols.AC])
+        match_data.away_offsides = get_col_value(row, cols_to_use[RawDataCols.AO])
+
         match_data.home_red_cards = get_col_value(row, cols_to_use[RawDataCols.HR])
         match_data.away_red_cards = get_col_value(row, cols_to_use[RawDataCols.AR])
+
         match_data.home_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.HY])
         match_data.away_yellow_cards = get_col_value(row, cols_to_use[RawDataCols.AY])
 

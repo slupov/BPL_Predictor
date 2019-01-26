@@ -58,7 +58,7 @@ class AnalysisModel:
 
         self.empty_row_len = len(empty_row_str) - 2
 
-        return "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s" % (
+        return "\033[93m%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\033[0m" % (
             header_str,
 
             self.get_string(classificator_str),
@@ -89,7 +89,7 @@ class AnalysisModel:
             self.get_string(bayes_avg_str.format("training",
                                                  self.bayes_avg[TRAIN])),
             self.get_string(bayes_avg_str.format("test",
-                                               self.bayes_avg[TEST])),
+                                                 self.bayes_avg[TEST])),
             footer_str)
 
     def get_string(self, string):
@@ -126,7 +126,7 @@ class AnalysisModel:
 
             # -----------> Bayes classifier
             self.bayes_avg = \
-                [x + y for x, y in zip(self.bayes_avg, self.bayes())]
+                [x + y for x, y in zip(self.bayes_avg, self.naive_bayes())]
 
         # apply average
         self.logistic_reg_avg = [x / ANALYSIS_ITERATIONS for x in self.logistic_reg_avg]
@@ -154,8 +154,8 @@ class AnalysisModel:
         return [knn.score(self.x_train, self.y_train),
                 knn.score(self.x_test, self.y_test)]
 
-    def bayes(self):
-        bayes=GaussianNB()
+    def naive_bayes(self):
+        bayes = GaussianNB()
         bayes.fit(self.x_train, self.y_train)
 
         return [bayes.score(self.x_train, self.y_train),
