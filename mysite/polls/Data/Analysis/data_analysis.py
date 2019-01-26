@@ -15,7 +15,10 @@ from .dependence_graphs import generate_dependecy_graphs
 
 
 def analyze_data():
-    # analyze_extracted_data()
+    print("\033[31mStarting extracted data analysis \033[0m")
+    analyze_extracted_data()
+
+    print("\033[31mStarting raw match data analysis \033[0m")
     analyze_raw_match_data()
 
 

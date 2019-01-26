@@ -27,7 +27,7 @@ def analyze_form_difference_dependence(train_df):
     plt.ylabel('Win rate')
 
     # plt.show()
-    plt.savefig('form_dependence.png')
+    plt.savefig('dependence_form.png')
 
 
 def analyze_goal_difference_dependence(train_df):
@@ -49,7 +49,7 @@ def analyze_goal_difference_dependence(train_df):
     plt.ylabel('Win rate')
 
     # plt.show()
-    plt.savefig('goal_dif_dependence.png')
+    plt.savefig('dependence_goal_dif.png')
 
 
 def analyze_score_difference_dependence(train_df):
@@ -61,8 +61,7 @@ def analyze_score_difference_dependence(train_df):
         dif = row[8]
         res.append(sum(
             [x / matches_won for x, y in zip(train_df['result'], train_df['score_diff'])
-             if
-             x == 1 and y < dif]))
+             if x == 1 and y < dif]))
 
     plt.figure('Score diff plot')
     plt.plot(train_df['score_diff'], res, '.')
@@ -71,7 +70,7 @@ def analyze_score_difference_dependence(train_df):
     plt.ylabel('Win rate')
 
     # plt.show()
-    plt.savefig('score_dif_dependence.png')
+    plt.savefig('dependence_score_dif.png')
 
 
 def analyze_concentration_dependence(train_df):
@@ -93,4 +92,4 @@ def analyze_concentration_dependence(train_df):
     plt.ylabel('Win rate')
 
     # plt.show()
-    plt.savefig('concentration_dependence.png')
+    plt.savefig('dependence_concentration.png')
