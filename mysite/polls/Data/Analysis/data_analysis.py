@@ -24,6 +24,8 @@ def analyze_data():
 
 
 def analyze_extracted_data():
+    '''Analyzes extracted db table'''
+
     extracted_data_df = pd.DataFrame.from_records(
         ExtractedFixtures.objects.all().filter(season__gte="17/18").
             order_by('season', 'home_team').values(), exclude=['id'])
@@ -60,6 +62,8 @@ def analyze_extracted_data():
 
 
 def analyze_raw_match_data():
+    '''Analyzes raw match data db table'''
+
     extracted_data_df = pd.DataFrame.from_records(
         MatchRawData.objects.all().filter(season__gte="17/18").
             order_by('season', 'home_team').values(), exclude=['id'])

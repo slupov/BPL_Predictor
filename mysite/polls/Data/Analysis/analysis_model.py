@@ -4,7 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 
-ANALYSIS_ITERATIONS = 10
+ANALYSIS_ITERATIONS = 1
 TRAIN = 0
 TEST = 1
 
@@ -31,14 +31,16 @@ class AnalysisModel:
 
     def __str__(self):
         log_reg_avg_str = \
-            "|Accuracy of Logistic regression classifier on {} set: \033[31m{:.2f}\033[93m\n"
+            "|Accuracy of Logistic regression classifier on {} set: \033[31m{:.2f}" \
+            "\033[93m\n"
 
         dec_tree_avg_str = \
             "|Accuracy of Decision Tree classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
         knn_avg_str = "|Accuracy of K-NN classifier on {} set: \033[31m{:.2f}\033[93m\n"
 
-        bayes_avg_str = "|Accuracy of Bayes classifier on {} set: \033[31m{:.2f}\033[93m\n"
+        bayes_avg_str = "|Accuracy of Bayes classifier on {} set: \033[31m{:.2f}" \
+                        "\033[93m\n"
 
         header_str = "+------------------- START %s -------------------+\n" % \
                      self.name
@@ -89,6 +91,7 @@ class AnalysisModel:
         self.bayes_avg[TRAIN] = 0
         self.bayes_avg[TEST] = 0
 
+        # K-Fold cross validation (k = ANALYSIS_ITERATIONS)
         for i in range(0, ANALYSIS_ITERATIONS):
             self.x_train, self.x_test, self.y_train, self.y_test = \
                 train_test_split(self.X, self.Y, random_state=0)
@@ -131,6 +134,26 @@ class AnalysisModel:
     def k_neighbours(self):
         knn = KNeighborsClassifier()
         knn.fit(self.x_train, self.y_train)
+
+        real = list(self.y_test)
+        predicted = list(knn.predict(self.x_test))
+
+        success_count = 0
+        for i in range(0, len(real)):
+            if int(real[i]) != int(predicted[i]):
+                success = "FAILED"
+            else:
+                success = "SUCCESS"
+                success_count += 1
+
+            print("Real: %s <-> %s :Pred   (%s)" % (real[i], predicted[i], success))
+
+        print("KNN SUCCESS RATE: %s" % (str(success_count / len(real))))
+        #
+        # print(list(self.y_test))
+        # print(list(knn.predict(self.x_test)))
+        #
+        # for i in range(0, len(self))
 
         return [knn.score(self.x_train, self.y_train),
                 knn.score(self.x_test, self.y_test)]
